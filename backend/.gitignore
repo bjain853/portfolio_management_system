@@ -1,0 +1,9 @@
+#folder
+.gradle/
+build/
+gradle/
+src/main/resources/static
+
+#files
+gradlew*
+src/main/resources/application.yml
