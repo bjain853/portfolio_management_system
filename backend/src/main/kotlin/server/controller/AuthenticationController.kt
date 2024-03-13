@@ -61,7 +61,7 @@ class AuthenticationController(
             )
         }
 
-        var advisorDto = signUpRequest.toAdvisorDTO()
+        val advisorDto = signUpRequest.toAdvisorDTO()
         val advisor: Advisor = advisorService.save(advisorDto.toAdvisor()) // doesn't have an ID
         return ResponseEntity.ok(advisor.toAdvisorDTO()) // should have an id after being saved
 

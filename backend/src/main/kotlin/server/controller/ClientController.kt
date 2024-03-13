@@ -1,12 +1,15 @@
 package server.controller
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
 import server.entity.Client
 import server.service.ClientService
 import java.util.*
+
+data class ClientInformation(
+    val firstName:String,
+    val lastName:String,
+)
 
 @RestController
 @RequestMapping("/api/clients")
@@ -17,6 +20,10 @@ class ClientController(private val clientService: ClientService) {
 
     @GetMapping("/{id}")
     fun getClientById(@PathVariable("id") clientId: UUID): Client? = clientService.getClientById(clientId)
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    fun addClient(@RequestBody clientInformation) :
 
 
 }
