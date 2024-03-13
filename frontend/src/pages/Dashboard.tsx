@@ -5,7 +5,7 @@ import TableComponent from "../components/TableComponent";
 
 import { ISecurityRecord } from "../types/security";
 import { useState, useEffect } from "react";
-import { api } from "../url";
+import { api } from "../api";
 export default function Dashboard() {
   const [totalPortfolioValue, setTotalPortfolioValue] = useState<number>(0.0);
   const [totalSecurityValueByCategory, setTotalSecurityValueByCategory] =

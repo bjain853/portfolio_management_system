@@ -5,7 +5,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { ChakraProvider } from "@chakra-ui/react";
 import SignUp from "./pages/SignUp";
 import ClientPortfolio from "./pages/ClientPortfolio";
-import { api } from "./url";
+import { api } from "./api";
 import ClientList from "./pages/ClientList";
 
 const router = createBrowserRouter([

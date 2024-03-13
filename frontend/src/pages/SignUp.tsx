@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../url";
+import { api } from "../api";
 
 interface SignUpInfo {
   email: string;

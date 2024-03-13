@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 
 import { Box, Center, Flex, Heading } from "@chakra-ui/react";
 import NavBar from "./components/NavBar";
-import { api } from "./url";
+import { api } from "./api";
 import { useNavigate } from "react-router-dom";
 import { Advisor } from "./types/advisor";
 

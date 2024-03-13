@@ -1,7 +1,7 @@
 import { useLoaderData } from "react-router-dom";
 import { Portfolio as IPortfolio } from "../types/portfolio";
 import { useState, useEffect } from "react";
-import { api } from "../url";
+import { api } from "../api";
 import { Box } from "@chakra-ui/react";
 import SecuritiesTable from "../components/SecuritiesTable";
 import AddSecurityForm from "../components/AddSecurityForm";

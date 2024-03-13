@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BasePath } from "../url";
+import { BasePath } from "../api";
 import axios from "axios";
 
 export interface Client {

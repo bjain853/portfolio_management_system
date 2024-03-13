@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AdvisorContext } from "../BaseLayout";
-import { api } from "../url";
+import { api } from "../api";
 import {
   Box,
   Card,
