@@ -2,14 +2,17 @@ package server.entity
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 import java.time.LocalDateTime
+import java.util.*
 
 
 @Entity
 @Table(name = "security")
 class Security(
 
-    val name:String,
+    val name: String,
 
     @Enumerated(EnumType.STRING)
     val category: SecurityCategory,
@@ -26,8 +29,9 @@ class Security(
     var portfolio: Portfolio,
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private val id: UUID
 ) {
 }
 

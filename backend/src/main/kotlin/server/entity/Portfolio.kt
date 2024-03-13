@@ -2,7 +2,10 @@ package server.entity
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 import java.time.LocalDateTime
+import java.util.*
 
 @Entity
 @Table(name = "portfolio")
@@ -14,13 +17,14 @@ class Portfolio(
 
     @OneToOne
     @JoinColumn(name = "client_id")
-    var client:Client,
+    var client: Client,
 
     @OneToMany(mappedBy = "portfolio")
     @JsonManagedReference
     var securities: List<Security>,
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    var id: UUID
 )

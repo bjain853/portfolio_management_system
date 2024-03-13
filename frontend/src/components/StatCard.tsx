@@ -6,23 +6,37 @@ import {
   StatLabel,
   StatNumber,
   StatHelpText,
+  StatArrow,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   value: number;
   caption: string;
-  helperText: string;
+  date: string;
+  navLink: string;
 }
 
-export default function StatCard({ value, caption, helperText }: IProps) {
+export default function StatCard({
+  value,
+  caption,
+  date,
+  navLink,
+}: Readonly<IProps>) {
+  const navigate = useNavigate();
   return (
-    <Container>
-      <Card>
+    <Container cursor={navLink !== "" ? "pointer" : ""}>
+      <Card onClick={() => navigate(navLink)}>
         <CardBody>
           <Stat>
-            <StatLabel>{caption} </StatLabel>
-            <StatNumber>$ {value ? value : 0} </StatNumber>
-            <StatHelpText>{helperText}</StatHelpText>
+            <StatLabel>
+              {caption} as of {date}
+            </StatLabel>
+            <StatNumber>$ {value} </StatNumber>
+            <StatHelpText>
+              <StatArrow type="increase" />
+              23.36%
+            </StatHelpText>
           </Stat>
         </CardBody>
       </Card>

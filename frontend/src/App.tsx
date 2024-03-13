@@ -1,12 +1,32 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import BaseLayout from "./BaseLayout";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { ChakraProvider } from "@chakra-ui/react";
+import SignUp from "./pages/SignUp";
+import ClientPortfolio from "./pages/ClientPortfolio";
+import { api } from "./url";
+import ClientList from "./pages/ClientList";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Dashboard />,
+    element: <ProtectedRoute Component={Dashboard} />,
+  },
+  {
+    path: "/clients",
+    element: <ProtectedRoute Component={ClientList} />,
+  },
+  {
+    path: "/clients/:clientId",
+    element: <ProtectedRoute Component={ClientPortfolio} />,
+    loader: async function LoaderFunction({ params }) {
+      return params.clientId;
+    },
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
   },
   {
     path: "/login",
@@ -16,9 +36,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <BaseLayout>
+    <ChakraProvider>
       <RouterProvider router={router} />
-    </BaseLayout>
+    </ChakraProvider>
   );
 }
 

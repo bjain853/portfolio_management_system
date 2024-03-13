@@ -13,18 +13,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../url";
 
-interface LoginInfo {
-  username: string;
+interface SignUpInfo {
+  email: string;
   password: string;
+  firstName: string;
+  lastName: string;
 }
-async function authHandler(loginInfo: LoginInfo): Promise<string | null> {
-  if (import.meta.env.DEV) {
-    const testId = "fef0e0e2-8c7e-463a-af86-651eac2a71fe";
-    localStorage.setItem("advisorId", testId);
-    return testId;
-  }
+async function authHandler(signUpInfo: SignUpInfo): Promise<string | null> {
   try {
-    const response = await api.post(`/auth/login`, { loginInfo });
+    const response = await api.post(`/auth/signup`, signUpInfo);
     if (response.status === 200) {
       const advisorProfile = response.data;
       localStorage.setItem("advisorId", JSON.stringify(advisorProfile.id));
@@ -39,7 +36,12 @@ async function authHandler(loginInfo: LoginInfo): Promise<string | null> {
 }
 
 export default function Login() {
-  const [form, setForm] = useState<LoginInfo>({ username: "", password: "" });
+  const [form, setForm] = useState<SignUpInfo>({
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+  });
   const navigate = useNavigate();
 
   function handleChange(e: any) {
@@ -67,14 +69,30 @@ export default function Login() {
       <AbsoluteCenter>
         <Card p="6rem" zIndex="4">
           {/* <Center pb="3em">
-            <Heading>LOGIN</Heading>
-          </Center> */}
+		  <Heading>LOGIN</Heading>
+		</Center> */}
           <FormControl>
+            <FormLabel pt="1em">First Name</FormLabel>
+            <Input
+              type="text"
+              name="firstName"
+              value={form.firstName}
+              onChange={handleChange}
+              bg="white"
+            />
+            <FormLabel pt="1em">Last Name</FormLabel>
+            <Input
+              type="text"
+              name="lastName"
+              value={form.lastName}
+              onChange={handleChange}
+              bg="white"
+            />
             <FormLabel>Email</FormLabel>
             <Input
-              name="username"
+              name="email"
               type="email"
-              value={form.username}
+              value={form.email}
               bg="white"
               onChange={handleChange}
             />
@@ -99,7 +117,7 @@ export default function Login() {
                 }}
                 onClick={onSubmitHandler}
               >
-                Login
+                Sign Up
               </Button>
             </Center>
           </FormControl>

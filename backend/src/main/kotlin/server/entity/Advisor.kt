@@ -2,41 +2,43 @@ package server.entity
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import java.util.*
 
 
 @Entity
 @Table(name = "advisor")
-class Advisor (
+class Advisor(
 
     @Column(nullable = false)
     var firstName: String,
 
     @Column(nullable = false)
-    var lastName: String?,
+    var lastName: String,
 
     @Column(nullable = false)
-    var address: String?,
+    var address: String? = null,
 
     @Column(nullable = false)
-    var phone: String?,
+    var phone: String? = null,
 
-    @Column(name="email",nullable = false)
-    private var username: String,
+    @Column(nullable = false)
+    var email: String = "",
 
-    @Column(name = "hashed_password")
-    private var password:String,
+    var hashed_password: String = "",
 
-    @OneToMany(mappedBy = "advisor",cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "advisor", cascade = [CascadeType.ALL])
     @JsonManagedReference
-    val clients: List<Client>,
+    val clients: List<Client>? = null,
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    val id: UUID? = null
 ) : UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
@@ -44,12 +46,12 @@ class Advisor (
 
     }
 
-    override fun getUsername(): String {
-        return username
+    override fun getPassword(): String {
+        return hashed_password
     }
 
-    override fun getPassword(): String {
-        return password
+    override fun getUsername(): String {
+        return email
     }
 
     override fun isAccountNonExpired(): Boolean {

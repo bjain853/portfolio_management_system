@@ -27,7 +27,7 @@ export default function TableComponent<T extends Object>({
   variant = "striped",
   heading,
 }: IProps<T>) {
-  return rows ? (
+  return rows.length === 0 ? (
     <Center>
       <Text fontSize="2xl" fontWeight="bold">
         No Data Available
@@ -45,10 +45,10 @@ export default function TableComponent<T extends Object>({
           </Tr>
         </Thead>
         <Tbody>
-          {rows.map((row: T) => (
-            <Tr>
-              {Object.keys(row).map(([key, value]) => (
-                <Td key={key}>{value.toString()}</Td>
+          {rows.map((row: T, index) => (
+            <Tr key={index}>
+              {columns.map((column) => (
+                <Td>{row[column]}</Td>
               ))}
             </Tr>
           ))}
