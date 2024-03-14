@@ -25,6 +25,6 @@ class AdvisorController(private val advisorService: AdvisorService, private val 
         advisorService.getAdvisorById(advisorId).toAdvisorDTO()
 
     @GetMapping("/{id}/clients")
-    fun getClientsByAdvisorId(@PathVariable("id") advisorId: UUID): List<Client> =
-        clientService.getClientsByAdvisor(advisorId)
+    fun getClientsByAdvisorId(@PathVariable("id") advisorId: UUID): List<Client>? =
+        clientService.getClientsByAdvisorId(advisorId)
 }

@@ -2,13 +2,11 @@ package server.service
 
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.CrossOrigin
 import server.entity.Advisor
 import server.repository.AdvisorRepository
 import java.util.*
 
 @Service
-@CrossOrigin("http://localhost:5173")
 class AdvisorService(private val advisorRepository: AdvisorRepository) : UserDetailsService {
     fun getAllAdvisors(): List<Advisor> = advisorRepository.findAll()
 

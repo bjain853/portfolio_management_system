@@ -38,7 +38,7 @@ class Advisor(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    val id: UUID? = null
+    val id: UUID = UUID.randomUUID()
 ) : UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {

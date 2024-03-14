@@ -19,7 +19,7 @@ class Security(
 
     var purchasePrice: Float,
 
-    var purchaseDate: LocalDateTime,
+    var purchaseDate: LocalDateTime = LocalDateTime.now(),
 
     var quantity: Float,
 
@@ -31,7 +31,7 @@ class Security(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private val id: UUID
+    private val id: UUID = UUID.randomUUID(),
 ) {
 }
 

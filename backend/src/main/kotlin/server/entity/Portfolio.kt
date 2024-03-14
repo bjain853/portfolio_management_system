@@ -13,7 +13,7 @@ class Portfolio(
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creationTimeStamp")
-    var clientEnrollmentDate: LocalDateTime,
+    var clientEnrollmentDate: LocalDateTime = LocalDateTime.now(),
 
     @OneToOne
     @JoinColumn(name = "client_id")
@@ -26,5 +26,5 @@ class Portfolio(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    var id: UUID
+    var id: UUID = UUID.randomUUID(),
 )

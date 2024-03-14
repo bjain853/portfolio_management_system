@@ -1,13 +1,12 @@
 package server.controller
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import server.DTO.SecurityDTO
 import server.entity.Security
 import server.entity.SecurityCategory
 import server.service.SecurityService
 import java.util.*
+
 
 @RestController
 @RequestMapping("/api/security")
@@ -32,5 +31,14 @@ class SecurityController(private val securityService: SecurityService) {
     fun getTotalForAllCategories(@PathVariable("advisorId") advisorId: UUID): Map<SecurityCategory, Float> =
         securityService.getSecurityTotalByCategoryByAdvisorId(advisorId)
 
+    @PostMapping
+    fun addNewSecurity(@RequestBody securityInformation: SecurityDTO): Security =
+        securityService.save(securityInformation)
+
+    @PatchMapping
+    fun updateSecurity(): SecurityDTO? {
+        // TODO : implement
+        return null
+    }
 
 }

@@ -5,12 +5,16 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import server.entity.Portfolio
+import server.service.ClientService
 import server.service.PortfolioService
 import java.util.*
 
 @RestController
 @RequestMapping("/api/portfolio")
-class PortfolioController(private val portfolioService: PortfolioService) {
+class PortfolioController(
+    private val portfolioService: PortfolioService,
+    private val clientService: ClientService
+) {
 
     @GetMapping
     fun getPortfolios(): List<Portfolio>? = portfolioService.getAllPortfolios()
@@ -20,8 +24,12 @@ class PortfolioController(private val portfolioService: PortfolioService) {
         portfolioService.getPortfolioById(portfolioId)
 
     @GetMapping("/client/{id}")
-    fun getPortfolioByClientId(@PathVariable("id") clientId: UUID): Portfolio? =
-        portfolioService.getPortfolioByClientId(clientId)
+    fun getPortfolioByClientId(@PathVariable("id") clientId: UUID): Portfolio? {
+        val client = clientService.getClientById(clientId)
+        if (client != null)
+            portfolioService.getPortfolioByClientId(client)
+        return null
+    }
 
 
     @GetMapping("/{id}/total")

@@ -34,7 +34,6 @@ class AuthenticationController(
         )
         log.info("Request login with username {}", loginRequest.username)
         val authenticationResponse = authenticationManager.authenticate(authenticationRequest)
-
         if (authenticationResponse.isAuthenticated) {
             val advisor: Advisor? = advisorService.loadUserByUsername(loginRequest.username)
             if (advisor != null) return ResponseEntity.ok(advisor.toAdvisorDTO())
@@ -61,9 +60,9 @@ class AuthenticationController(
             )
         }
 
-        val advisorDto = signUpRequest.toAdvisorDTO()
-        val advisor: Advisor = advisorService.save(advisorDto.toAdvisor()) // doesn't have an ID
-        return ResponseEntity.ok(advisor.toAdvisorDTO()) // should have an id after being saved
+        val advisorDto = signUpRequest.toAdvisorDTO() // doesn't have an ID
+        val advisor: Advisor = advisorService.save(advisorDto.toAdvisor()) // should have an id after being saved
+        return ResponseEntity.ok(advisor.toAdvisorDTO())
 
     }
 }
