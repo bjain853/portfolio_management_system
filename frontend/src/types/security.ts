@@ -1,4 +1,12 @@
+export interface ISecurityCategoryRecord {
+	security_type: string;
+	total_value: number;
+}
+
 export interface ISecurityRecord {
-  security_type: string;
-  total_value: number;
+	name: string;
+	category: string;
+	purchasePrice: number;
+	purchaseDate: Date;
+	quantity: number;
 }

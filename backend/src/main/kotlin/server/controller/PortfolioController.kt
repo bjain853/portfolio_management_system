@@ -23,14 +23,13 @@ class PortfolioController(
     fun getPortfolioById(@PathVariable("id") portfolioId: UUID): Portfolio? =
         portfolioService.getPortfolioById(portfolioId)
 
-    @GetMapping("/client/{id}")
-    fun getPortfolioByClientId(@PathVariable("id") clientId: UUID): Portfolio? {
+    @GetMapping("/client/{clientId}")
+    fun getPortfolioByClientId(@PathVariable("clientId") clientId: UUID): Portfolio? {
         val client = clientService.getClientById(clientId)
         if (client != null)
-            portfolioService.getPortfolioByClientId(client)
+            return portfolioService.getPortfolioByClient(client)
         return null
     }
-
 
     @GetMapping("/{id}/total")
     fun getPortfolioTotalSecurities(@PathVariable("id") portfolioId: UUID): Float =

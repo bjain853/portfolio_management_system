@@ -13,8 +13,9 @@ import java.util.*
 @RequestMapping("/api/clients")
 class ClientController(private val clientService: ClientService, private val portfolioService: PortfolioService) {
 
-    @GetMapping
-    fun getClients(): List<Client>? = clientService.getAllClients()
+    @GetMapping()
+    fun getClients(@PathVariable("advisorId") advisorId: UUID): List<Client>? =
+        clientService.getAllClients()?.filter { client: Client -> client.advisor.id == advisorId }
 
     @GetMapping("/{id}")
     fun getClientById(@PathVariable("id") clientId: UUID): Client? = clientService.getClientById(clientId)

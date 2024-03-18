@@ -23,8 +23,8 @@ class PortfolioService(
     fun getTotalPortfolioSecurities(portfolio: Portfolio): Float = portfolio.securities
         .map { security: Security -> security.quantity * security.purchasePrice }.sum()
 
-    fun getPortfolioByClientId(client: Client): Portfolio? {
-        return portfolioRepository.findPortfolioByClient(client)
+    fun getPortfolioByClient(client: Client): Portfolio? {
+        return portfolioRepository.findByClient(client)
     }
 
     fun save(client: Client): Portfolio? {

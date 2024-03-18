@@ -1,12 +1,8 @@
-import { useState, useEffect } from "react";
-import { BasePath } from "../api";
-import axios from "axios";
-
 export interface Client {
-  id: string;
-  firstName: string;
-  lastName: string;
-  totalPortfolioValue: number;
+	id: string;
+	firstName: string;
+	lastName: string;
+	clientEnrollmentDate: string;
 }
 
 // export function useGetClientProfile(clientId: number) {

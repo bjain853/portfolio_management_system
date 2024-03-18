@@ -8,5 +8,5 @@ import java.util.*
 
 @Repository
 interface PortfolioRepository : JpaRepository<Portfolio, UUID> {
-    fun findPortfolioByClient(client: Client): Portfolio?
+    fun findByClient(client: Client): Portfolio?
 }

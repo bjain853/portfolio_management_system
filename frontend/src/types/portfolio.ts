@@ -1,8 +1,9 @@
-import { ISecurityRecord } from "./security";
+import { Client } from './client';
+import { ISecurityRecord } from './security';
 
 export interface Portfolio {
-  clientId: string;
-  id: string;
-  enrollmentDate: Date;
-  securities: ISecurityRecord[];
+	client: Client;
+	id: string;
+	clientEnrollmentDate: string;
+	securities: ISecurityRecord[];
 }
