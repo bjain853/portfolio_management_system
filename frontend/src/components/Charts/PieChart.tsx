@@ -38,7 +38,7 @@ export const PieChart = ({ labels, dataArray, displayTitle }: IProps) => {
 	};
 
 	const hasData: boolean = dataArray
-		.map((element) => element !== null && element !== undefined)
+		.map((element) => !!element)
 		.reduce((prevValue, curr) => prevValue || curr);
 
 	return (

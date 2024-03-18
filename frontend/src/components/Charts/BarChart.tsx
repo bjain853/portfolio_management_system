@@ -30,9 +30,9 @@ export const BarChart = ({
 	};
 
 	const hasData: boolean = dataArray
-		.map((element) => element !== null && element !== undefined)
+		.map((element) => !!element)
 		.reduce((prevValue, curr) => prevValue || curr);
-
+	console.log(hasData);
 	return (
 		<div className='chart-container'>
 			{hasData && (
