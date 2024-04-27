@@ -1,4 +1,4 @@
-package server
+package server.filters
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ReadListener
@@ -25,26 +25,9 @@ class LoggingFilter : OncePerRequestFilter() {
         val builder = StringBuilder()
         builder.append("Request: ")
         builder.append("${wrapper.method} ${wrapper.requestURI} ")
-        builder.append("headers: {")
-        wrapper.headerNames.asIterator().forEach { header ->
-            builder.append("$header: ${wrapper.getHeader(header)} ")
-        }
-        builder.append("} ")
-        builder.append("content: ", wrapper.contentAsString, "\n")
         return builder.toString()
     }
 
-    fun logBuilderResponse(response: HttpServletResponse): String {
-        val builder = StringBuilder()
-        builder.append("Response: ")
-        builder.append("${response.status} ")
-        builder.append("headers: { ")
-        response.headerNames.forEach { header ->
-            builder.append("$header: ${response.getHeader(header)} ")
-        }
-        builder.append("} ")
-        return builder.toString()
-    }
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -53,7 +36,6 @@ class LoggingFilter : OncePerRequestFilter() {
     ) {
         val wrapper = RepeatableContentCachingRequestWrapper(request)
         log.info(logBuilderRequest(wrapper))
-//        log.info(logBuilderResponse(response))
         filterChain.doFilter(wrapper, response)
     }
 

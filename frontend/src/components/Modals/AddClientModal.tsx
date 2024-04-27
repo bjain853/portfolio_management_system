@@ -14,19 +14,20 @@ import {
 	Circle,
 } from '@chakra-ui/react';
 import { FaPlus } from 'react-icons/fa';
-import { AdvisorContext } from '../../AdvisorContext';
-import { useContext, useState } from 'react';
-import { api } from '../../api/api';
+import { useAdvisorContext } from '../../contexts/AdvisorContext';
+import { useState } from 'react';
+import { addNewClient } from '../../api/client';
 import { Advisor } from '../../types/advisor';
-import { MAIN_COLOR } from '../../util/theme';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 export default function AddSecurityModal() {
-	const advisor: Advisor | undefined = useContext(AdvisorContext);
+	const { advisor } = useAdvisorContext();
+	const { theme } = useThemeContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [newClient, setNewClient] = useState({ firstName: '', lastName: '' });
-	function addNewClient() {
-		if (advisor)
-			api.post(`/clients`, { ...newClient, advisorId: advisor.id });
+
+	function onClickHandler() {
+		addNewClient(newClient, advisor);
 	}
 
 	function onChangeHandler(e: any) {
@@ -46,7 +47,7 @@ export default function AddSecurityModal() {
 					position='fixed'
 					right='40px'
 					bottom='40px'
-					bgColor={`${MAIN_COLOR}.500`}
+					bgColor={`${theme}.500`}
 					textColor='white'
 				>
 					Add Client
@@ -71,7 +72,7 @@ export default function AddSecurityModal() {
 								onChange={onChangeHandler}
 							/>
 							<Center pt='10px'>
-								<Button onClick={addNewClient}>
+								<Button onClick={onClickHandler}>
 									Add Client
 								</Button>
 							</Center>

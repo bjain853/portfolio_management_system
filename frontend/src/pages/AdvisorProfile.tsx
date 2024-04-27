@@ -1,16 +1,15 @@
-import { useContext } from 'react';
 import { Flex, Heading, Text } from '@chakra-ui/react';
 
-import { AdvisorContext } from '../AdvisorContext';
+import { useAdvisorContext } from '../contexts/AdvisorContext';
 
 function AdvisorProfile() {
-	const advisor = useContext(AdvisorContext);
+	const { advisor } = useAdvisorContext();
 	return (
 		<Flex flexDir='column'>
 			<Heading>
-				{advisor?.firstName} {advisor?.lastName}
+				{advisor.firstName} {advisor.lastName}
 			</Heading>
-			<Text> Email :{advisor?.username}</Text>
+			<Text> Email :{advisor.username}</Text>
 		</Flex>
 	);
 }

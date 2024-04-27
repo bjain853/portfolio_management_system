@@ -11,7 +11,6 @@ import {
 	Tr,
 } from '@chakra-ui/react';
 import { convertKeyToHeading } from '../util/stringFunctions';
-import { MAIN_COLOR } from '../util/theme';
 
 interface IProps<T extends {}> {
 	columns: string[];
@@ -24,7 +23,7 @@ interface IProps<T extends {}> {
 export default function TableComponent<T extends Object>({
 	columns,
 	rows,
-	color = MAIN_COLOR,
+	color,
 	variant = 'striped',
 	heading,
 }: IProps<T>) {

@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { MAIN_COLOR } from '../../util/theme';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 interface IProps {
 	icon: ComponentWithAs<'svg', IconProps> | IconType;
@@ -31,6 +31,7 @@ export default function NavItem({
 	mode,
 	to,
 }: Readonly<IProps>) {
+	const { theme } = useThemeContext();
 	return (
 		<Flex
 			mt={30}
@@ -41,12 +42,12 @@ export default function NavItem({
 			<ChakraLink
 				as={ReactRouterLink}
 				to={to}
-				backgroundColor={active ? `${MAIN_COLOR}.300` : ''}
+				backgroundColor={active ? `${theme}.300` : ''}
 				p={3}
 				borderRadius={8}
 				_hover={{
 					textDecor: 'none',
-					backgroundColor: `${MAIN_COLOR}.300`,
+					backgroundColor: `${theme}.300`,
 					textColor: 'white',
 				}}
 				w={navSize == 'large' ? '100%' : ''}

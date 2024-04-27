@@ -5,30 +5,31 @@ import {
 	Heading,
 	IconButton,
 	Slide,
+	Box,
 	Text,
 	useColorMode,
 	Link as ChakraLink,
 } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, Link as ReactRouterLink } from 'react-router-dom';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { FaHome, FaMoon } from 'react-icons/fa';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaBriefcase, FaSun, FaUser } from 'react-icons/fa6';
 
-import { AdvisorContext } from '../../AdvisorContext';
+import { useAdvisorContext } from '../../contexts/AdvisorContext';
 import { Advisor } from '../../types/advisor';
 import NavItem from './NavItem';
 
 const MotionIconButton = motion(IconButton);
 
-function Sidebar() {
+function Sidebar(...props: any) {
 	const [size, setSize] = useState('small');
-	const advisor: undefined | Advisor = useContext(AdvisorContext);
+	const { advisor } = useAdvisorContext();
 	const { colorMode, toggleColorMode } = useColorMode();
 	const { pathname } = useLocation();
 	return (
-		<Flex
+		<Box
 			pos='sticky'
 			left='5'
 			h='95vh'
@@ -38,6 +39,7 @@ function Sidebar() {
 			w={size == 'small' ? '150px' : '250px'}
 			flexDir='column'
 			justifyContent='space-between'
+			{...props}
 		>
 			<Flex>
 				<IconButton
@@ -133,7 +135,7 @@ function Sidebar() {
 					</Flex>
 				</ChakraLink>
 			</Flex>
-		</Flex>
+		</Box>
 	);
 }
 

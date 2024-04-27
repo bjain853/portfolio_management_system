@@ -4,18 +4,18 @@ import { Chart as ChartJS, CategoryScale } from 'chart.js/auto';
 ChartJS.register(CategoryScale);
 
 interface IProps {
-	labels: string[];
-	dataArray: number[];
+	labels?: string[];
+	data?: number[];
 	displayTitle: string;
 }
 
-export const PieChart = ({ labels, dataArray, displayTitle }: IProps) => {
-	const data = {
-		labels: labels,
+export const PieChart = ({ labels, data, displayTitle }: IProps) => {
+	const source = {
+		labels,
 		datasets: [
 			{
 				label: 'Security By Category',
-				data: dataArray,
+				data,
 				backgroundColor: [
 					'rgba(255, 99, 132, 0.5)',
 					'rgba(54, 162, 235, 0.5)',
@@ -37,22 +37,20 @@ export const PieChart = ({ labels, dataArray, displayTitle }: IProps) => {
 		],
 	};
 
-	const hasData: boolean = dataArray
+	const hasData = data!!
 		.map((element) => !!element)
-		.reduce((prevValue, curr) => prevValue || curr);
+		.reduce((prevValue, curr) => prevValue || curr, false);
 
-	return (
+	return hasData ? (
 		<div className='chart-container'>
-			{hasData && (
-				<Pie
-					data={data}
-					options={{
-						plugins: {
-							title: { text: `${displayTitle}`, display: true },
-						},
-					}}
-				/>
-			)}
+			<Pie
+				data={source}
+				options={{
+					plugins: {
+						title: { text: `${displayTitle}`, display: true },
+					},
+				}}
+			/>
 		</div>
-	);
+	) : null;
 };

@@ -42,7 +42,7 @@ class Advisor(
 ) : UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return mutableListOf(SimpleGrantedAuthority("Advisor"))
+        return mutableListOf(SimpleGrantedAuthority("ADVISOR"))
 
     }
 

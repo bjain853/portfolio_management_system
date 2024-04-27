@@ -2,8 +2,9 @@ import { FormLabel, Input } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { SignUpInfo, signUpHandler } from '../api/auth';
+import { signUpHandler } from '../api/auth';
 import AuthFormLayout from '../components/Layouts/AuthFormLayout';
+import { SignUpInfo } from '../types/auth';
 
 export default function SignUp() {
 	const [form, setForm] = useState<SignUpInfo>({
@@ -23,8 +24,8 @@ export default function SignUp() {
 
 	const onSubmitHandler = async () => {
 		const advisorId = await signUpHandler(form);
-		if (advisorId) navigate('/');
-		else navigate('/login');
+		if (advisorId) navigate('/login');
+		else navigate('/signup');
 	};
 
 	return (
@@ -36,7 +37,6 @@ export default function SignUp() {
 					name='firstName'
 					value={form.firstName}
 					onChange={handleChange}
-					bg='white'
 				/>
 				<FormLabel pt='1em'>Last Name</FormLabel>
 				<Input
@@ -44,14 +44,12 @@ export default function SignUp() {
 					name='lastName'
 					value={form.lastName}
 					onChange={handleChange}
-					bg='white'
 				/>
 				<FormLabel>Email</FormLabel>
 				<Input
 					name='email'
 					type='email'
 					value={form.email}
-					bg='white'
 					onChange={handleChange}
 				/>
 				<FormLabel pt='1em'>Password</FormLabel>
@@ -60,7 +58,6 @@ export default function SignUp() {
 					name='password'
 					value={form.password}
 					onChange={handleChange}
-					bg='white'
 				/>
 			</>
 		</AuthFormLayout>

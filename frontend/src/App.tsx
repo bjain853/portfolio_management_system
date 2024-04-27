@@ -8,6 +8,8 @@ import ClientPortfolio from './pages/ClientPortfolio';
 import ClientList from './pages/ClientList';
 import AdvisorProfile from './pages/AdvisorProfile';
 import Error from './pages/Error';
+import AdvisorContextProvider from './contexts/AdvisorContext';
+import ThemeContextProvider from './contexts/ThemeContext';
 
 const router = createBrowserRouter([
 	{
@@ -46,9 +48,13 @@ const router = createBrowserRouter([
 function App() {
 	return (
 		<ChakraProvider>
-			<Box minW='100vw' minH='100vh' overflow='hidden'>
-				<RouterProvider router={router} />
-			</Box>
+			<AdvisorContextProvider>
+				<ThemeContextProvider>
+					<Box minW='100vw' minH='100vh' overflow='hidden'>
+						<RouterProvider router={router} />
+					</Box>
+				</ThemeContextProvider>
+			</AdvisorContextProvider>
 		</ChakraProvider>
 	);
 }

@@ -1,12 +1,24 @@
-import axios from "axios";
+import axios from 'axios';
 
-export const api = axios.create({
-  baseURL: "http://localhost:8080/api",
+const api = axios.create({
+	baseURL: 'http://localhost:8080/api',
+	withCredentials: true,
 });
 
-export function apiGET<T>(url: string) {}
+export function get(url: string) {
+	return api.get(url);
+}
 
-export function apiPOST<T>(url: string) {}
+export function post(
+	url: string,
+	body: Object,
+	withCredentials: boolean = true,
+) {
+	return api.post(url, body, {
+		withCredentials,
+	});
+}
 
-export function apiPUT<T>(url: string) {}
-export function apiPATCH<T>(url: string) {}
+export function put(url: string, body: Object) {
+	return api.put(url, body);
+}

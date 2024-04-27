@@ -5,66 +5,78 @@ import {
 	Spinner,
 	AbsoluteCenter,
 } from '@chakra-ui/react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 
-import { ISecurityCategoryRecord } from '../types/security';
-import { AdvisorContext } from '../AdvisorContext';
-import { Advisor } from '../types/advisor';
+import { useAdvisorContext } from '../contexts/AdvisorContext';
 import StatCard from '../components/StatCard';
 import { BarChart } from '../components/Charts/BarChart';
 import { PieChart } from '../components/Charts/PieChart';
 import {
 	getDailyTotalSecurityForAdvisor,
 	getTotalSecurityByCategoryForAdvisor,
-	getTotalSecurityForAdvisor,
-	writeDashboardCache,
-} from '../api/security';
-import { MAIN_COLOR } from '../util/theme';
+	getProfitLossForAdvisor,
+} from '../api/advisor';
+import { useCacheContext } from '../contexts/CacheContext';
+import { useThemeContext } from '../contexts/ThemeContext';
 
 export default function Dashboard() {
-	const advisor: Advisor | undefined = useContext(AdvisorContext);
-	const [totalPortfolioValue, setTotalPortfolioValue] = useState<number>(0.0);
+	const { advisor } = useAdvisorContext();
+	const { cache, storeInCache } = useCacheContext();
+	const { theme } = useThemeContext();
+	const advisorId = advisor.id;
+
+	const [totalProfitLoss, setTotalProfitLoss] = useState(0.0);
 	const [totalSecurityValueByCategory, setTotalSecurityValueByCategory] =
-		useState<ISecurityCategoryRecord[]>([]);
-	const [dailyTotalData, setDailyTotalData] = useState<number[]>([]);
-	const [dailyTotalLabel, setDailyTotalLabel] = useState<string[]>([]);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const [hasError, setError] = useState<string>('');
+		useState({
+			labels: [],
+			data: [],
+		});
+
+	const [dailySecurityBalance, setDailySecurityBalance] = useState({
+		labels: [],
+		data: [],
+	});
+
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [errorMessage, setError] = useState<string>('');
 
 	useEffect(() => {
-		if (advisor) {
-			(async () => {
-				try {
-					const advisorId = advisor.id;
-					const totalSecurity = await getTotalSecurityForAdvisor(
-						advisorId,
-					);
-					setTotalPortfolioValue(totalSecurity);
-					const dataArray =
-						await getTotalSecurityByCategoryForAdvisor(advisorId);
-					setTotalSecurityValueByCategory(dataArray);
-					const { labels, data } =
-						await getDailyTotalSecurityForAdvisor(advisorId);
-					setDailyTotalData(data);
-					setDailyTotalLabel(labels);
-				} catch (e: any) {
-					setError(e.message);
-				} finally {
-					setIsLoading(false);
-					writeDashboardCache();
-				}
-			})();
-		}
-	}, [advisor?.id]);
+		setIsLoading(true);
+		try {
+			storeInCache('totalProfitLoss', () =>
+				getProfitLossForAdvisor(advisorId),
+			);
 
-	return isLoading || hasError !== '' ? (
+			storeInCache('totalSecurityValueByCategory', () =>
+				getTotalSecurityByCategoryForAdvisor(advisorId),
+			);
+
+			storeInCache('dailySecurityBalance', () =>
+				getDailyTotalSecurityForAdvisor(advisorId),
+			);
+
+			if (cache) {
+				setTotalProfitLoss(cache.totalProfitLoss);
+				setTotalSecurityValueByCategory(
+					cache.totalSecurityValueByCategory,
+				);
+				setDailySecurityBalance(cache.dailySecurityBalance);
+			}
+		} catch (e: any) {
+			setError(e.message);
+		} finally {
+			setIsLoading(false);
+		}
+	}, [cache === null]);
+
+	return isLoading && errorMessage !== '' ? (
 		<AbsoluteCenter>
 			{isLoading ? (
 				<Spinner
 					thickness='4px'
 					speed='0.65s'
 					emptyColor='gray.200'
-					color={`${MAIN_COLOR}.500`}
+					color={`${theme}.500`}
 					size='xl'
 				/>
 			) : (
@@ -74,28 +86,26 @@ export default function Dashboard() {
 	) : (
 		<Grid
 			minW='100%'
-			templateRows='repeat(2, 1fr)'
-			templateColumns='repeat(4, 1fr)'
+			templateRows={{ base: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)' }}
+			templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3,1fr)' }}
 			gap={4}
 		>
 			<GridItem>
 				<StatCard
-					value={totalPortfolioValue}
+					value={totalProfitLoss}
 					caption={'Portfolio Total Value'}
 					date={new Date(Date.now()).toDateString()}
 				/>
 			</GridItem>
 
 			<GridItem>
-				<PieChart
-					dataArray={totalSecurityValueByCategory.map(
-						(security) => security.total_value,
-					)}
-					labels={totalSecurityValueByCategory.map(
-						(security) => security.security_type,
-					)}
-					displayTitle='Total Security By Category'
-				/>
+				{totalSecurityValueByCategory ? (
+					<PieChart
+						data={totalSecurityValueByCategory?.data}
+						labels={totalSecurityValueByCategory?.labels}
+						displayTitle='Total Security By Category'
+					/>
+				) : null}
 
 				{/* <TableComponent<ISecurityCategoryRecord>
 							columns={['security_type', 'total_value']}
@@ -106,13 +116,15 @@ export default function Dashboard() {
 			</GridItem>
 			<GridItem>
 				<div>
-					<BarChart
-						labels={dailyTotalLabel}
-						dataArray={dailyTotalData}
-						displayTitle='Daily total'
-						barFillColor='rgba(54, 162, 235, 0.6)'
-						borderWidth={2}
-					/>
+					{dailySecurityBalance ? (
+						<BarChart
+							labels={dailySecurityBalance.labels}
+							data={dailySecurityBalance.data}
+							displayTitle='Daily total'
+							barFillColor='rgba(54, 162, 235, 0.6)'
+							borderWidth={2}
+						/>
+					) : null}
 				</div>
 			</GridItem>
 		</Grid>

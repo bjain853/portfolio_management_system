@@ -21,7 +21,7 @@ class Portfolio(
 
     @OneToMany(mappedBy = "portfolio")
     @JsonManagedReference
-    var securities: List<Security>,
+    var transactions: List<Transaction>,
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

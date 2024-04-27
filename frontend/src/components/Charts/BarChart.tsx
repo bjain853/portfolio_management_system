@@ -4,8 +4,8 @@ import { Chart as ChartJS, CategoryScale } from 'chart.js/auto';
 ChartJS.register(CategoryScale);
 
 interface IProps {
-	labels: string[];
-	dataArray: number[];
+	labels?: string[];
+	data?: number[];
 	displayTitle: string;
 	barFillColor: string;
 	borderWidth: number;
@@ -13,39 +13,37 @@ interface IProps {
 
 export const BarChart = ({
 	labels,
-	dataArray,
+	data,
 	displayTitle,
 	barFillColor,
 	borderWidth,
 }: IProps) => {
-	const data = {
-		labels: labels,
+	const source = {
+		labels,
 		datasets: [
 			{
-				data: dataArray,
+				data,
 				backgroundColor: [barFillColor],
 				borderWidth,
 			},
 		],
 	};
 
-	const hasData: boolean = dataArray
+	const hasData = data!!
 		.map((element) => !!element)
-		.reduce((prevValue, curr) => prevValue || curr);
-	console.log(hasData);
-	return (
+		.reduce((prevValue, curr) => prevValue || curr, false);
+
+	return hasData ? (
 		<div className='chart-container'>
-			{hasData && (
-				<Bar
-					data={data}
-					options={{
-						plugins: {
-							title: { text: `${displayTitle}`, display: true },
-							legend: { display: false },
-						},
-					}}
-				/>
-			)}
+			<Bar
+				data={source}
+				options={{
+					plugins: {
+						title: { text: `${displayTitle}`, display: true },
+						legend: { display: false },
+					},
+				}}
+			/>
 		</div>
-	);
+	) : null;
 };

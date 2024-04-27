@@ -1,4 +1,4 @@
-package server
+package server.utils
 
 import server.DTO.AdvisorDTO
 import server.DTO.SignUpDTO
@@ -22,3 +22,4 @@ fun SignUpDTO.toAdvisorDTO(): AdvisorDTO = AdvisorDTO(
     firstName = firstName,
     id = null,
 )
+

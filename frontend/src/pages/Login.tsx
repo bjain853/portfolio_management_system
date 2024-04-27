@@ -2,12 +2,16 @@ import { FormLabel, Input } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { LoginInfo, loginHandler } from '../api/auth';
+import { loginHandler } from '../api/auth';
 import AuthFormLayout from '../components/Layouts/AuthFormLayout';
+import { LoginInfo } from '../types/auth';
+import { useAdvisorContext } from '../contexts/AdvisorContext';
 
 export default function Login() {
 	const [form, setForm] = useState<LoginInfo>({ username: '', password: '' });
+	const { setAdvisor } = useAdvisorContext();
 	const navigate = useNavigate();
+
 	function handleChange(e: any) {
 		setForm({
 			...form,
@@ -16,9 +20,11 @@ export default function Login() {
 	}
 
 	const onSubmitHandler = async () => {
-		const advisorId = await loginHandler(form);
-		if (advisorId) navigate('/');
-		else navigate('/login');
+		const advisor = await loginHandler(form);
+		if (advisor) {
+			setAdvisor(advisor);
+			navigate('/');
+		} else navigate('/login');
 	};
 
 	return (
@@ -29,7 +35,6 @@ export default function Login() {
 					name='username'
 					type='email'
 					value={form.username}
-					bg='white'
 					onChange={handleChange}
 				/>
 				<FormLabel pt='1em'>Password</FormLabel>
@@ -38,7 +43,6 @@ export default function Login() {
 					name='password'
 					value={form.password}
 					onChange={handleChange}
-					bg='white'
 				/>
 			</>
 		</AuthFormLayout>

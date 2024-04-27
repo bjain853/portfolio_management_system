@@ -16,9 +16,11 @@ import {
 import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 
-import { MAIN_COLOR } from '../../util/theme';
-import { addNewSecurity, getSecurityCategories } from '../../api/security';
+import { getSecurityCategories } from '../../api/security';
+
 import { ISecurityRecord } from '../../types/security';
+import { useThemeContext } from '../../contexts/ThemeContext';
+import { addNewSecurity } from '../../api/client';
 
 interface IProps {
 	portfolioId: string;
@@ -26,6 +28,7 @@ interface IProps {
 
 export default function AddSecurityModal({ portfolioId }: Readonly<IProps>) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { theme } = useThemeContext();
 	const [securityCategories, setSecurityCategories] = useState<string[]>([]);
 	const [newSecurity, setNewSecurity] = useState<ISecurityRecord>({
 		category: '',
@@ -61,7 +64,7 @@ export default function AddSecurityModal({ portfolioId }: Readonly<IProps>) {
 				position='fixed'
 				right='40px'
 				bottom='40px'
-				bgColor={`${MAIN_COLOR}.500`}
+				bgColor={`${theme}.500`}
 				textColor='white'
 			>
 				Add Security

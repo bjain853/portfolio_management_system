@@ -1,17 +1,15 @@
-import { useContext, useEffect, useState } from 'react';
-import { AdvisorContext } from '../AdvisorContext';
-import { api } from '../api/api';
+import { useEffect, useState } from 'react';
+
+import { useAdvisorContext } from '../contexts/AdvisorContext';
 import {
 	Box,
 	Card,
 	CardBody,
 	CardHeader,
 	Center,
-	Circle,
 	Heading,
 	List,
 	ListItem,
-	Image,
 	Flex,
 	Text,
 	AbsoluteCenter,
@@ -21,25 +19,23 @@ import { Client } from '../types/client';
 import { Advisor } from '../types/advisor';
 import { useNavigate } from 'react-router-dom';
 import AddClientModal from '../components/Modals/AddClientModal';
-import { MAIN_COLOR } from '../util/theme';
+import { getClients } from '../api/client';
+import { useThemeContext } from '../contexts/ThemeContext';
 
 export default function ClientList() {
-	const advisor: Advisor | undefined = useContext(AdvisorContext);
+	const { advisor } = useAdvisorContext();
+	const { theme } = useThemeContext();
 	const [clients, setClients] = useState<Client[] | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [hasError, setError] = useState<string>('');
 
 	const navigate = useNavigate();
 
-	const fetchClients = async () => {
-		const response = await api.get(`/advisors/${advisor?.id}/clients`);
-		return response.data;
-	};
 	useEffect(() => {
 		if (advisor && !clients) {
 			(async () => {
 				try {
-					const clients = await fetchClients();
+					const clients = await getClients(advisor);
 					setClients(clients);
 				} catch (e: any) {
 					setError(e.message);
@@ -57,7 +53,7 @@ export default function ClientList() {
 					thickness='4px'
 					speed='0.65s'
 					emptyColor='gray.200'
-					color={`${MAIN_COLOR}.500`}
+					color={`${theme}.500`}
 					size='xl'
 				/>
 			) : (
