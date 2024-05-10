@@ -7,7 +7,7 @@ import java.util.*
 
 @Repository
 interface AdvisorRepository : JpaRepository<Advisor, UUID> {
-    fun findByEmail(email: String): Advisor?
+    fun findByEmail(email: String): Advisor
 
 
 }

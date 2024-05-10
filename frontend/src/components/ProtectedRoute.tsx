@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
 import BaseLayout from './Layouts/AppLayout';
@@ -11,13 +11,14 @@ interface IProps {
 
 export default function ProtectedRoute({ Component, ...rest }: IProps) {
 	const { advisor } = useAdvisorContext();
-	if (advisor)
-		return (
-			<CacheContextProvider>
-				<BaseLayout>
-					<Component {...rest} />
-				</BaseLayout>
-			</CacheContextProvider>
-		);
-	else return <Navigate to='/login' replace />;
+
+	return advisor?.id ? (
+		<CacheContextProvider>
+			<BaseLayout>
+				<Component {...rest} />
+			</BaseLayout>
+		</CacheContextProvider>
+	) : (
+		<Navigate to='/login' replace />
+	);
 }

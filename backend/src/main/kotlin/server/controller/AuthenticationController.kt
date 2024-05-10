@@ -4,7 +4,9 @@ import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import server.DTO.AdvisorDTO
@@ -33,13 +35,13 @@ class AuthenticationController(
     @PostMapping("/login")
     fun loginAdvisor(@RequestBody loginUserInfo: LoginDTO, response: HttpServletResponse): ResponseEntity<AdvisorDTO> {
         val authenticatedUser: Advisor = authenticationService.authenticate(loginUserInfo)
-        // send token and expiration time as cookie
-        val cookie = Cookie("token", jwtService.generateToken(authenticatedUser))
-        cookie.isHttpOnly = true
-        cookie.maxAge = jwtService.getExpirationDuration().toInt()
-        cookie.path = "/"
-        response.addCookie(cookie)
-        // send advisorId in body
+        val cookie: ResponseCookie =
+            ResponseCookie.from("token", jwtService.generateToken(authenticatedUser)) // key & value
+                .domain("localhost")
+                .path("/")
+                .maxAge(jwtService.getExpirationDuration().toLong())
+                .build()
+        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString())
         return ResponseEntity.ok(authenticatedUser.toAdvisorDTO())
     }
 
@@ -51,4 +53,9 @@ class AuthenticationController(
         // redirect to login after verification can login
         return ResponseEntity.ok().body(signedUpUser.toAdvisorDTO())
     }
+}
+
+
+class ModernCookie(name: String?, value: String?) : Cookie(name, value) {
+    val SameSite = "Strict"
 }

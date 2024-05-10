@@ -5,9 +5,9 @@ export async function loginHandler(
 	loginInfo: LoginInfo,
 ): Promise<string | null> {
 	try {
-		const response = await post(`/auth/login`, { ...loginInfo }, false);
-		const advisorId = response.data;
-		return advisorId;
+		const response = await post(`/auth/login`, loginInfo);
+		const advisor = response.data;
+		return advisor;
 	} catch (e: any) {
 		console.error('Invalid credentials');
 		return null;
@@ -18,7 +18,7 @@ export async function signUpHandler(
 	signUpInfo: SignUpInfo,
 ): Promise<string | null> {
 	try {
-		const response = await post(`/auth/signup`, { ...signUpInfo }, false);
+		const response = await post(`/auth/signup`, { ...signUpInfo });
 		const advisorProfile = response.data;
 		return advisorProfile;
 	} catch (e: any) {
@@ -33,5 +33,14 @@ export async function checkAuthenticated() {
 		return response.status;
 	} catch (e: any) {
 		throw Error('Not authenticated user');
+	}
+}
+
+export async function logout() {
+	try {
+		const response = await get('/auth/logout');
+		return response.status === 200;
+	} catch (e: any) {
+		throw Error('Not logged out properly');
 	}
 }

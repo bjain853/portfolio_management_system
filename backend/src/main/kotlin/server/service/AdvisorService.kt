@@ -16,7 +16,7 @@ class AdvisorService(
 
     fun getAdvisorById(id: UUID): Advisor = advisorRepository.getReferenceById(id)
 
-    fun getAdvisorWithEmail(email: String): Advisor? = advisorRepository.findByEmail(email)
+    fun getAdvisorWithEmail(email: String): Advisor = advisorRepository.findByEmail(email)
 
     fun getAdvisorProfitLoss(advisorId: UUID): Float? =
         getAdvisorById(advisorId).clients!!.map { client: Client ->

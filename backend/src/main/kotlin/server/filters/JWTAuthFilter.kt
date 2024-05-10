@@ -34,22 +34,24 @@ class JWTAuthFilter(
             filterChain.doFilter(request, response)
             return
         }
-
         try {
-            val jwtToken = cookies[0].getAttribute("token")
-            val userEmail: String = jwtService.extractUsername(jwtToken)
-            val authentication: Authentication? = SecurityContextHolder.getContext().authentication
-            if (authentication == null) {
-                val userDetails = userDetailsService.loadUserByUsername(userEmail)
-                if (jwtService.isTokenValid(jwtToken, userDetails)) {
-                    val authToken = UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.authorities
-                    )
-                    authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
-                    SecurityContextHolder.getContext().authentication = authToken
-                    logger.debug("Authenticated user using JWT")
+            val jwtTokenExists = cookies[0].name == "token"
+            if (jwtTokenExists) {
+                val token: String = cookies[0].value
+                val userEmail: String = jwtService.extractUsername(token)
+                val authentication: Authentication? = SecurityContextHolder.getContext().authentication
+                if (authentication == null) {
+                    val userDetails = userDetailsService.loadUserByUsername(userEmail)
+                    if (jwtService.isTokenValid(token, userDetails)) {
+                        val authToken = UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.authorities
+                        )
+                        authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
+                        SecurityContextHolder.getContext().authentication = authToken
+                        logger.debug("Authenticated user using JWT")
+                    }
                 }
             }
             filterChain.doFilter(request, response)

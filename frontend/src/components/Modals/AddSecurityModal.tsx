@@ -16,7 +16,10 @@ import {
 import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 
-import { getSecurityCategories } from '../../api/security';
+import {
+	getSecurityCategories,
+	getSecurityNamesByCategory,
+} from '../../api/security';
 
 import { ISecurityRecord } from '../../types/security';
 import { useThemeContext } from '../../contexts/ThemeContext';
@@ -29,7 +32,11 @@ interface IProps {
 export default function AddSecurityModal({ portfolioId }: Readonly<IProps>) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { theme } = useThemeContext();
+
 	const [securityCategories, setSecurityCategories] = useState<string[]>([]);
+	const [securityNamesByCategories, setSecurityNamesByCategories] =
+		useState<any>([]);
+
 	const [newSecurity, setNewSecurity] = useState<ISecurityRecord>({
 		category: '',
 		purchasePrice: 0,
@@ -44,6 +51,17 @@ export default function AddSecurityModal({ portfolioId }: Readonly<IProps>) {
 			setSecurityCategories(categories);
 		})();
 	}, []);
+
+	useEffect(() => {
+		(async () => {
+			if (newSecurity.category !== '') {
+				const newSecurityNameOptions = await getSecurityNamesByCategory(
+					newSecurity.category,
+				);
+				setSecurityNamesByCategories(newSecurityNameOptions);
+			}
+		})();
+	}, [newSecurity.category]);
 
 	function onClickHandler() {
 		addNewSecurity(newSecurity, portfolioId);
@@ -86,9 +104,31 @@ export default function AddSecurityModal({ portfolioId }: Readonly<IProps>) {
 								))}
 							</Select>
 							<FormLabel>Name</FormLabel>
-							<Input type='text' name='name' />
+							<Select
+								placeholder='Select name'
+								name='name'
+								disabled={newSecurity?.category === ''}
+							>
+								{securityNamesByCategories.length !== 0 ? (
+									securityNamesByCategories.map(
+										(name: string, idx: React.Key) => (
+											<option key={idx}>{name}</option>
+										),
+									)
+								) : (
+									<option key={0}>
+										{' '}
+										Select Category first
+									</option>
+								)}
+							</Select>
 							<FormLabel>Price</FormLabel>
-							<Input type='number' name='price' />
+							<Input
+								type='number'
+								name='price'
+								value={newSecurity.purchasePrice}
+								disabled={newSecurity.name === ''}
+							/>
 							<FormLabel>Quantity</FormLabel>
 							<Input type='number' name='quantity' />
 							<Center mt='10px'>

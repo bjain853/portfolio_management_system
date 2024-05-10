@@ -9,14 +9,8 @@ export function get(url: string) {
 	return api.get(url);
 }
 
-export function post(
-	url: string,
-	body: Object,
-	withCredentials: boolean = true,
-) {
-	return api.post(url, body, {
-		withCredentials,
-	});
+export function post(url: string, body: Object) {
+	return api.post(url, body);
 }
 
 export function put(url: string, body: Object) {

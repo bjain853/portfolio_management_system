@@ -23,10 +23,13 @@ class SecurityController(
     fun getSecurityById(@PathVariable("id") id: UUID): Security? = securityService.getSecurityById(id)
 
     @GetMapping("/{category}/names")
-    fun getSecurityNamesForCategory(@PathVariable category: SecurityCategory): List<String> =
+    fun getSecurityNamesForCategory(@PathVariable("category") category: SecurityCategory): List<String> =
         securityService.getSecurityNamesByCategory(category)
 
-    // TODO: Implement table with current prices
+    @GetMapping("/{name}/latest-price")
+    fun getLatestSecurityPriceByName(@PathVariable("name") name: String): Number =
+        securityService.getLatestSecurityPriceByName(name)
+
     // TODO: Total Return
     // TODO: Sharpe Ratio
     // TODO: R-Squared

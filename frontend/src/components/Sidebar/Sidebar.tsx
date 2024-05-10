@@ -4,7 +4,6 @@ import {
 	Flex,
 	Heading,
 	IconButton,
-	Slide,
 	Box,
 	Text,
 	useColorMode,
@@ -15,11 +14,12 @@ import { useLocation, Link as ReactRouterLink } from 'react-router-dom';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { FaHome, FaMoon } from 'react-icons/fa';
 import { AnimatePresence, motion } from 'framer-motion';
-import { FaBriefcase, FaSun, FaUser } from 'react-icons/fa6';
+import { FaBriefcase, FaSun } from 'react-icons/fa6';
+import { RiLogoutBoxLine } from 'react-icons/ri';
 
 import { useAdvisorContext } from '../../contexts/AdvisorContext';
-import { Advisor } from '../../types/advisor';
 import NavItem from './NavItem';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const MotionIconButton = motion(IconButton);
 
@@ -28,6 +28,7 @@ function Sidebar(...props: any) {
 	const { advisor } = useAdvisorContext();
 	const { colorMode, toggleColorMode } = useColorMode();
 	const { pathname } = useLocation();
+	const { removeCookie } = useAuthContext();
 	return (
 		<Box
 			pos='sticky'
@@ -53,6 +54,7 @@ function Sidebar(...props: any) {
 						else setSize('small');
 					}}
 				/>
+
 				{size == 'large' && (
 					<AnimatePresence>
 						<MotionIconButton
@@ -65,6 +67,16 @@ function Sidebar(...props: any) {
 						/>
 					</AnimatePresence>
 				)}
+				<IconButton
+					background='none'
+					aria-label=''
+					mt={5}
+					_hover={{ background: 'none' }}
+					icon={<RiLogoutBoxLine />}
+					onClick={() => {
+						//removeCookie('token'); deletes the value only
+					}}
+				/>
 			</Flex>
 			<Flex
 				p='5%'

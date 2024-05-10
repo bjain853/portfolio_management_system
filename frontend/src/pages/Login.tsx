@@ -20,9 +20,9 @@ export default function Login() {
 	}
 
 	const onSubmitHandler = async () => {
-		const advisor = await loginHandler(form);
-		if (advisor) {
-			setAdvisor(advisor);
+		const loggedInAdvisor = await loginHandler(form);
+		if (loggedInAdvisor) {
+			setAdvisor(loggedInAdvisor);
 			navigate('/');
 		} else navigate('/login');
 	};

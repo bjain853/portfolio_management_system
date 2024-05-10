@@ -17,8 +17,10 @@ class SecurityService(
 
     fun getLatestSecurityPriceByName(name: String): Float = securityRepository.getLatestSecurityAdjCloseByName(name)
 
-    fun getSecurityNamesByCategory(securityCategory: SecurityCategory): List<String> =
-        securityRepository.getDistinctNameByCategory(securityCategory)
+    fun getSecurityNamesByCategory(securityCategory: SecurityCategory): List<String> {
+        return securityRepository.findDistinctNameByCategory(securityCategory)
+    }
 
-    fun getSecurityCategoryByName(name: String): SecurityCategory = securityRepository.getCategoryByName(name)
+
+    fun getSecurityCategoryByName(name: String): SecurityCategory = securityRepository.findCategoryByName(name)
 }

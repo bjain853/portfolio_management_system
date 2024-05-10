@@ -10,6 +10,7 @@ import AdvisorProfile from './pages/AdvisorProfile';
 import Error from './pages/Error';
 import AdvisorContextProvider from './contexts/AdvisorContext';
 import ThemeContextProvider from './contexts/ThemeContext';
+import AuthContextProvider from './contexts/AuthContext';
 
 const router = createBrowserRouter([
 	{
@@ -48,13 +49,15 @@ const router = createBrowserRouter([
 function App() {
 	return (
 		<ChakraProvider>
-			<AdvisorContextProvider>
-				<ThemeContextProvider>
-					<Box minW='100vw' minH='100vh' overflow='hidden'>
-						<RouterProvider router={router} />
-					</Box>
-				</ThemeContextProvider>
-			</AdvisorContextProvider>
+			<AuthContextProvider>
+				<AdvisorContextProvider>
+					<ThemeContextProvider>
+						<Box minW='100vw' minH='100vh' overflow='hidden'>
+							<RouterProvider router={router} />
+						</Box>
+					</ThemeContextProvider>
+				</AdvisorContextProvider>
+			</AuthContextProvider>
 		</ChakraProvider>
 	);
 }

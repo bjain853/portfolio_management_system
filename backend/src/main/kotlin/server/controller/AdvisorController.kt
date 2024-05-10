@@ -1,11 +1,11 @@
 package server.controller
 
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import server.DTO.AdvisorDTO
-import server.entity.Advisor
 import server.entity.Client
 import server.entity.SecurityCategory
 import server.service.AdvisorService
@@ -24,12 +24,18 @@ class AdvisorController(
     private val clientService: ClientService,
     private val transactionService: TransactionService
 ) {
-    @GetMapping
-    fun getAdvisors(): List<Advisor>? = advisorService.getAllAdvisors()
 
-    @GetMapping("/{id}")
-    fun getAdvisorById(@PathVariable("id") advisorId: UUID): AdvisorDTO =
-        advisorService.getAdvisorById(advisorId).toAdvisorDTO()
+    @GetMapping
+    fun getAdvisorById(): AdvisorDTO? { // get logged in advisors info
+
+        val authToken = SecurityContextHolder.getContext().authentication
+        if (authToken.isAuthenticated) {
+            val advisorEmail = authToken.name
+            return advisorService.getAdvisorWithEmail(advisorEmail).toAdvisorDTO()
+        }
+        return null
+    }
+
 
     @GetMapping("/{id}/clients")
     fun getClientsByAdvisorId(@PathVariable("id") advisorId: UUID): List<Client>? =
