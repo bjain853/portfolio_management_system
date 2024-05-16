@@ -1,25 +1,24 @@
 import {
 	Avatar,
+	Box,
+	Link as ChakraLink,
 	Divider,
 	Flex,
 	Heading,
 	IconButton,
-	Box,
 	Text,
 	useColorMode,
-	Link as ChakraLink,
 } from '@chakra-ui/react';
-import { useState } from 'react';
-import { useLocation, Link as ReactRouterLink } from 'react-router-dom';
-import { GiHamburgerMenu } from 'react-icons/gi';
-import { FaHome, FaMoon } from 'react-icons/fa';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
+import { FaHome, FaMoon } from 'react-icons/fa';
 import { FaBriefcase, FaSun } from 'react-icons/fa6';
+import { GiHamburgerMenu } from 'react-icons/gi';
 import { RiLogoutBoxLine } from 'react-icons/ri';
+import { Link as ReactRouterLink, useLocation } from 'react-router-dom';
 
 import { useAdvisorContext } from '../../contexts/AdvisorContext';
 import NavItem from './NavItem';
-import { useAuthContext } from '../../contexts/AuthContext';
 
 const MotionIconButton = motion(IconButton);
 
@@ -28,7 +27,6 @@ function Sidebar(...props: any) {
 	const { advisor } = useAdvisorContext();
 	const { colorMode, toggleColorMode } = useColorMode();
 	const { pathname } = useLocation();
-	const { removeCookie } = useAuthContext();
 	return (
 		<Box
 			pos='sticky'

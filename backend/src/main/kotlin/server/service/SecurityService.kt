@@ -15,7 +15,7 @@ class SecurityService(
 
     fun getSecurityById(id: UUID): Security = securityRepository.getReferenceById(id)
 
-    fun getLatestSecurityPriceByName(name: String): Float = securityRepository.getLatestSecurityAdjCloseByName(name)
+    fun getLatestSecurityPriceByName(name: String): Float = securityRepository.getLatestSecurityAdjCloseByName(name) ?: 0F
 
     fun getSecurityNamesByCategory(securityCategory: SecurityCategory): List<String> {
         return securityRepository.findDistinctNameByCategory(securityCategory)

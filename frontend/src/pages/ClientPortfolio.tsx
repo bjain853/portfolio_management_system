@@ -1,32 +1,32 @@
-import { useLoaderData } from 'react-router-dom';
-import { Portfolio } from '../types/portfolio';
-import { useState, useEffect } from 'react';
 import {
-	Flex,
-	Center,
-	Heading,
-	Text,
-	Box,
 	AbsoluteCenter,
+	Box,
+	Center,
 	Container,
+	Heading,
 	Spinner,
+	Text,
 } from '@chakra-ui/react';
-import SecuritiesTable from '../components/SecuritiesTable';
-import AddSecurityModal from '../components/Modals/AddSecurityModal';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { getClientPortfolio } from '../api/client';
+import AddSecurityModal from '../components/Modals/AddSecurityModal';
+import SecuritiesTable from '../components/SecuritiesTable';
 import { useThemeContext } from '../contexts/ThemeContext';
+import { Portfolio } from '../types/portfolio';
 
 function ClientPortfolio() {
-	const clientId = useLoaderData() as string;
+	const { clientId } = useParams<{ clientId: string }>();
 	const { theme } = useThemeContext();
 
 	const [portfolio, setPotfolio] = useState<Portfolio | undefined>(undefined);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [hasError, setError] = useState<string>('');
 
 	useEffect(() => {
-		if (clientId && !portfolio) {
+		if (clientId) {
 			(async () => {
+				setIsLoading(true);
 				try {
 					const portfolio: Portfolio = await getClientPortfolio(
 						clientId,

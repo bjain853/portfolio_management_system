@@ -15,13 +15,13 @@ class AuthenticationService(
     private val authenticationManager: AuthenticationManager
 ) {
     fun signup(input: SignUpDTO): Advisor {
-        val newAdvisor = Advisor(
+        val newSignUpAdvisor = Advisor(
             firstName = input.firstName,
-            lastName = input.lastname,
+            lastName = input.lastName,
             email = input.username,
-            hashed_password = passwordEncoder.encode(input.password).toString()
+            hashedPassword = passwordEncoder.encode(input.password).toString()
         )
-        return advisorService.save(newAdvisor)
+        return advisorService.save(newSignUpAdvisor)
     }
 
     fun authenticate(input: LoginDTO): Advisor {
@@ -31,6 +31,6 @@ class AuthenticationService(
                 input.password
             )
         )
-        return advisorService.getAdvisorWithEmail(input.username)!!
+        return advisorService.getAdvisorWithEmail(input.username)
     }
 }

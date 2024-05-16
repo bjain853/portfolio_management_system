@@ -1,36 +1,46 @@
 import {
-	Center,
-	Card,
-	FormControl,
 	Button,
+	Card,
+	Center,
+	Circle,
+	Flex,
+	FormControl,
+	IconButton,
 	Text,
 	useColorMode,
-	IconButton,
-	Flex,
-	Circle,
-	Spacer,
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
-import Header from '../Header';
-import { useThemeContext } from '../../contexts/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
-import { FaSun, FaMoon } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
+import { FaMoon, FaSun } from 'react-icons/fa';
+import { useThemeContext } from '../../contexts/ThemeContext';
+import Header from '../Header';
 
-interface IProps {
+interface IProps<T> {
 	onSubmitHandler: () => Promise<void>;
 	children: JSX.Element;
-	authType: string;
+	setForm: React.Dispatch<React.SetStateAction<T>>;
+	form: T;
+	buttonText: String;
 }
 
 const MotionIconButton = motion(IconButton);
 
-export default function AuthForm({
+export default function AuthForm<T>({
 	onSubmitHandler,
 	children,
-	authType,
-}: Readonly<IProps>) {
+	setForm,
+	form,
+	buttonText,
+}: Readonly<IProps<T>>) {
+	function handleChange(e: any) {
+		setForm({
+			...form,
+			[e.target.name]: e.target.value,
+		});
+	}
+
 	const { theme } = useThemeContext();
 	const { colorMode, toggleColorMode } = useColorMode();
 	return (
@@ -73,7 +83,7 @@ export default function AuthForm({
 			</Flex>
 			<Center>
 				<Card p='5rem' zIndex='4' borderRadius='20px' mt='4em'>
-					<FormControl>
+					<FormControl onChange={handleChange}>
 						{children}
 						<Center>
 							<Button
@@ -88,13 +98,19 @@ export default function AuthForm({
 								}}
 								onClick={onSubmitHandler}
 							>
-								{authType}
+								{buttonText}
 							</Button>
 						</Center>
 					</FormControl>
-					<Link to={authType === 'Login' ? '/signup' : '/login'}>
+					<Link
+						to={
+							buttonText.toLowerCase() === 'login'
+								? '/signup'
+								: '/login'
+						}
+					>
 						<Text mt='20px'>
-							{authType === 'Login'
+							{buttonText.toLowerCase() === 'login'
 								? "Don't have an account? Register"
 								: ' Have an account already? Login'}
 						</Text>

@@ -2,8 +2,8 @@
 .gradle/
 build/
 gradle/
+src/main/resources/env/
 
 #files
 gradlew*
-src/main/resources/application.yml
-*.sql
+

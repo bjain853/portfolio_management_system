@@ -1,17 +1,26 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Advisor } from '../types/advisor';
 import { getAdvisorProfile } from '../api/advisor';
+import { sessionExists } from '../api/auth';
+import { Advisor } from '../types/advisor';
 
-const AdvisorContext = createContext<any>(undefined);
+type AdvisorContext = {
+	advisor: Advisor | null;
+	setAdvisor: React.Dispatch<React.SetStateAction<Advisor | null>>;
+};
+
+const AdvisorContext = createContext<AdvisorContext | undefined>(undefined);
 
 const AdvisorContextProvider = ({ children }: any) => {
-	const [advisor, setAdvisor] = useState<Advisor | undefined>(undefined);
+	const [advisor, setAdvisor] = useState<Advisor | null>(null);
+	const signedIn = advisor !== null;
 
 	useEffect(() => {
-		if (!advisor) {
-			getAdvisorProfile().then((response) => setAdvisor(response.data));
-		}
-	}, [advisor?.id]);
+		sessionExists().then((loggedInPrev) => {
+			if (loggedInPrev) {
+				getAdvisorProfile().then((profile) => setAdvisor(profile));
+			}
+		});
+	}, [signedIn]);
 
 	return (
 		<AdvisorContext.Provider value={{ advisor, setAdvisor }}>
@@ -20,7 +29,7 @@ const AdvisorContextProvider = ({ children }: any) => {
 	);
 };
 
-export function useAdvisorContext() {
+export function useAdvisorContext(): AdvisorContext {
 	const context = useContext(AdvisorContext);
 	if (context === undefined) {
 		throw Error(

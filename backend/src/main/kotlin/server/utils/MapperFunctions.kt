@@ -18,7 +18,7 @@ fun AdvisorDTO.toAdvisor(): Advisor = Advisor(
 
 fun SignUpDTO.toAdvisorDTO(): AdvisorDTO = AdvisorDTO(
     username = username,
-    lastName = lastname,
+    lastName = lastName,
     firstName = firstName,
     id = null,
 )

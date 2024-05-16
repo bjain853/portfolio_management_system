@@ -1,6 +1,5 @@
 package server.controller
 
-import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -47,15 +46,9 @@ class AuthenticationController(
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    fun signupAdvisor(@RequestBody signUpInfo: SignUpDTO): ResponseEntity<AdvisorDTO> {
+    fun signupAdvisor(@RequestBody signUpInfo: SignUpDTO): ResponseEntity<Void> {
         log.info("Request to create a new advisor")
-        val signedUpUser = authenticationService.signup(signUpInfo)
-        // redirect to login after verification can login
-        return ResponseEntity.ok().body(signedUpUser.toAdvisorDTO())
+        authenticationService.signup(signUpInfo)
+        return ResponseEntity.status(HttpStatus.CREATED).build()
     }
-}
-
-
-class ModernCookie(name: String?, value: String?) : Cookie(name, value) {
-    val SameSite = "Strict"
 }

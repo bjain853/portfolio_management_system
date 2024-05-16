@@ -6,9 +6,15 @@ import { get, post } from './api';
 export async function addNewClient(
 	newClient: Partial<Client>,
 	advisor: Advisor,
-) {
-	if (advisor)
-		post(`/clients`, { ...newClient, advisorId: advisor.id }, true);
+): Promise<Client> {
+	if (advisor) {
+		const response = await post(`/clients`, {
+			...newClient,
+			advisorId: advisor.id,
+		});
+		return response.data;
+	}
+	throw Error('No advisor found');
 }
 
 export async function getClients(advisor: Advisor): Promise<Client[]> {

@@ -16,19 +16,21 @@ data class ClientInformation(
 
 @Service
 class ClientService(
-    private val clientRepository: ClientRepository, private val advisorService: AdvisorService,
-    private val portfolioService: PortfolioService
+    private val clientRepository: ClientRepository,
+    private val portfolioService: PortfolioService,
+    private val advisorService: AdvisorService
 ) {
 
     fun getAllClients(): List<Client>? = clientRepository.findAll()
 
     fun getClientById(id: UUID): Client? = clientRepository.getReferenceById(id)
 
+    fun getClientProfitLoss(client:Client) = portfolioService.getPortfolioProfit(client.portfolio.id)
+
     fun getClientsByAdvisorId(advisorId: UUID): List<Client>? =
         getAllClients()?.filter { client: Client -> client.advisor.id == advisorId }
 
-    fun save(clientInformation: ClientInformation): Client? {
-        // Cannot have clients with same name
+    fun save(clientInformation: ClientInformation): Client {
         if (clientRepository.findByFirstNameAndLastName(
                 clientInformation.firstName,
                 clientInformation.lastName
@@ -42,16 +44,20 @@ class ClientService(
             )
         }
 
-        val advisor = advisorService.getAdvisorById(clientInformation.advisorId)
+        val newPortfolio = Portfolio(
+            transactions = null,
+            client = null,
+        )
+        val savedPortfolio = portfolioService.save(newPortfolio) // portfolio with date and id
         val newClient = Client(
             firstName = clientInformation.firstName,
             lastName = clientInformation.lastName,
-            advisor = advisor,
-            portfolio = null
+            advisor = advisorService.getAdvisorById(clientInformation.advisorId),
+            portfolio = savedPortfolio
         )
-        val clientSaved = clientRepository.save(newClient)
-        val createdPortfolio = portfolioService.save(clientSaved)
-        clientSaved.portfolio = createdPortfolio
-        return clientRepository.save(clientSaved)
+        val savedClient =  clientRepository.save(newClient)
+        savedPortfolio.client = savedClient
+        portfolioService.save(savedPortfolio)
+        return savedClient
     }
 }

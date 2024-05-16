@@ -38,7 +38,6 @@ class PortfolioController(
 
     @GetMapping("/{id}/total")
     fun getPortfolioTotalSecurities(@PathVariable("id") portfolioId: UUID): Float? =
-        portfolioService.getTotalProfitLossForPorfolio(portfolioId)
-
+        portfolioService.getPortfolioProfit(portfolioId)
 
 }

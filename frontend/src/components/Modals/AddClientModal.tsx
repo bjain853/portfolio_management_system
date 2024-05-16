@@ -1,33 +1,38 @@
 import {
+	Button,
+	Center,
+	Circle,
 	FormControl,
 	FormLabel,
 	Input,
-	Center,
 	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
 	ModalBody,
-	ModalCloseButton,
+	ModalContent,
+	ModalOverlay,
 	useDisclosure,
-	Button,
-	Circle,
 } from '@chakra-ui/react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { useAdvisorContext } from '../../contexts/AdvisorContext';
-import { useState } from 'react';
 import { addNewClient } from '../../api/client';
-import { Advisor } from '../../types/advisor';
+import { useAdvisorContext } from '../../contexts/AdvisorContext';
 import { useThemeContext } from '../../contexts/ThemeContext';
+import { Client } from '../../types/client';
 
-export default function AddSecurityModal() {
+type IProps = {
+	setClients: Dispatch<SetStateAction<Client[]>>;
+};
+
+export default function AddSecurityModal({ setClients }: IProps) {
 	const { advisor } = useAdvisorContext();
 	const { theme } = useThemeContext();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [newClient, setNewClient] = useState({ firstName: '', lastName: '' });
 
 	function onClickHandler() {
-		addNewClient(newClient, advisor);
+		addNewClient(newClient, advisor).then((addedClient) => {
+			if (addedClient !== null)
+				setClients((prev) => [...prev, addedClient]);
+		});
 	}
 
 	function onChangeHandler(e: any) {

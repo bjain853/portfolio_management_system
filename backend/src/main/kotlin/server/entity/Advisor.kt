@@ -1,6 +1,5 @@
 package server.entity
 
-import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
@@ -21,19 +20,16 @@ class Advisor(
     var lastName: String,
 
     @Column(nullable = false)
-    var address: String? = null,
-
-    @Column(nullable = false)
-    var phone: String? = null,
-
-    @Column(nullable = false)
     var email: String = "",
 
-    var hashed_password: String = "",
+    @Column(nullable = false)
+    var hashedPassword: String = "",
 
-    @OneToMany(mappedBy = "advisor", cascade = [CascadeType.ALL])
-    @JsonManagedReference
-    val clients: List<Client>? = null,
+    @Column
+    var address: String? = null,
+
+    @Column
+    var phone: String? = null,
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -47,7 +43,7 @@ class Advisor(
     }
 
     override fun getPassword(): String {
-        return hashed_password
+        return hashedPassword
     }
 
     override fun getUsername(): String {

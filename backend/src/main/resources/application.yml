@@ -1,0 +1,44 @@
+server:
+  error:
+    whitelabel:
+      enabled: false
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  output:
+    ansi:
+      enabled: ALWAYS
+  resources:
+    add-mappings: false
+  task:
+    scheduling:
+      pool:
+        size: 2
+  #  session:
+#    store-type: jdbc
+#    jdbc:
+#      initialize-schema: always
+  datasource:
+    url: jdbc:mysql://localhost:3306/Portfolio_management
+    username: root
+    password: pass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+        naming_strategy: org.hibernate.cfg.EJB3NamingStrategy
+        ddl-auto: update
+        hibernate:
+          dialect: org.hibernate.dialect.MySQLDialect
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        web:
+          filter:
+            CommonsRequestLoggingFilter: DEBUG
+security:
+  password-strength: 12
+  jwt:
+    secret-key: 900fb4564b6d22773cbf2534dc4201ba57b93f8f30e15b610d16d2b515ce461d
+    expiration-time: 14400

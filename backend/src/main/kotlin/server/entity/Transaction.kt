@@ -12,7 +12,8 @@ import java.util.*
 @Table(name = "transactions")
 class Transaction(
 
-    var security_name: String,
+
+    var securityName: String,
     var price: Float,
     var quantity: Float,
     var date: LocalDateTime = LocalDateTime.now(),

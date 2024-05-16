@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+  db:
+    container_name: mysql_db
+    image: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USERNAME: test
+      MYSQL_PASSWORD: password
+      MYSQL_DB: Portfolio_management
+    networks:
+      - spring-cloud-network
+  backend-server:
+    container_name: spring-backend
+    image: openjdk:21
+    restart: always
+    build:
+      dockerfile: src/main/resources/Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-cloud-network
+    depends_on:
+      - db
+
+
+networks:
+  spring-cloud-network:
+    driver: bridge

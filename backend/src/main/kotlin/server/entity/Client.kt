@@ -18,10 +18,9 @@ class Client(
     @JsonBackReference
     var advisor: Advisor,
 
-    @OneToOne
-    @JoinColumn(name = "portfolio_id")
+    @OneToOne(mappedBy = "client")
     @JsonIgnore
-    var portfolio: Portfolio?,
+    var portfolio: Portfolio,
     
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

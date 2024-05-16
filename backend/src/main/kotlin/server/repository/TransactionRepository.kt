@@ -8,4 +8,5 @@ import java.util.*
 @Repository
 interface TransactionRepository : JpaRepository<Transaction, UUID> {
     fun findAllByPortfolioId(portfolioId: UUID): List<Transaction>
+
 }

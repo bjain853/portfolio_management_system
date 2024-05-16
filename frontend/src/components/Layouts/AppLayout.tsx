@@ -1,14 +1,22 @@
 import { Center, Flex, Hide } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Outlet, useLoaderData, useNavigate } from 'react-router-dom';
 
-import Sidebar from '../Sidebar/Sidebar';
+import { useEffect } from 'react';
+import { useAdvisorContext } from '../../contexts/AdvisorContext';
+import { Advisor } from '../../types/advisor';
 import Header from '../Header';
-import ThemeContextProvider from '../../contexts/ThemeContext';
+import Sidebar from '../Sidebar/Sidebar';
 
 const MotionFlex = motion(Flex);
-const BaseLayout = ({ children }: any) => {
+const BaseLayout = () => {
 	const navigate = useNavigate();
+	const { setAdvisor } = useAdvisorContext();
+	const advisorProfile = useLoaderData() as Advisor;
+
+	useEffect(() => {
+		if (advisorProfile !== null) setAdvisor(advisorProfile);
+	}, []);
 
 	return (
 		<Flex flexDir={{ base: 'column', lg: 'row' }}>
@@ -34,7 +42,7 @@ const BaseLayout = ({ children }: any) => {
 								exit={{ opacity: 0 }}
 								minW='100%'
 							>
-								{children}
+								<Outlet />
 							</MotionFlex>
 						</AnimatePresence>
 					</Flex>

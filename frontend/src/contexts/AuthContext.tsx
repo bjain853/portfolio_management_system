@@ -3,7 +3,7 @@ import { useCookies } from 'react-cookie';
 
 const AuthContext = createContext<any>(undefined);
 
-const AdvisorContextProvider = ({ children }: any) => {
+const AuthContextProvider = ({ children }: any) => {
 	const [cookies, removeCookie] = useCookies(['token']);
 	return (
 		<AuthContext.Provider value={{ cookies, removeCookie }}>
@@ -22,4 +22,4 @@ export function useAuthContext() {
 	return context;
 }
 
-export default AdvisorContextProvider;
+export default AuthContextProvider;

@@ -41,9 +41,13 @@ class AdvisorController(
     fun getClientsByAdvisorId(@PathVariable("id") advisorId: UUID): List<Client>? =
         clientService.getClientsByAdvisorId(advisorId)
 
+    @GetMapping("/{id}/current-value")
+    fun getTotalPortfolioValue(@PathVariable("id") advisorId: UUID): Float? =
+        advisorService.advisorPortfolioTotalValue(advisorId)
+
     @GetMapping("/{id}/profit-loss")
     fun getTotalSecurities(@PathVariable("id") advisorId: UUID): Float? =
-        advisorService.getAdvisorProfitLoss(advisorId)
+        advisorService.getAllPortfoliosProfitLoss(advisorId)
 
     @GetMapping("{advisorId}/total-category/{category}")
     fun getTotalByCategory(

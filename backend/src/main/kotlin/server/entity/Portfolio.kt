@@ -17,11 +17,11 @@ class Portfolio(
 
     @OneToOne
     @JoinColumn(name = "client_id")
-    var client: Client,
+    var client: Client?, // nullable since portfolio can be on its own but client shouldn't be without a portfolio
 
     @OneToMany(mappedBy = "portfolio")
     @JsonManagedReference
-    var transactions: List<Transaction>,
+    var transactions: List<Transaction>? = null,
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

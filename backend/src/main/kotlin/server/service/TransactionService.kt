@@ -17,7 +17,7 @@ class TransactionService(
 ) {
     fun getAllTransactionsByAdvisorId(advisorId: UUID): List<Transaction> =
         transactionRepository.findAll()
-            .filter { transaction: Transaction -> transaction.portfolio.client.advisor.id == advisorId }
+            .filter { transaction: Transaction -> transaction.portfolio.client?.advisor?.id == advisorId }
 
     fun getAllTransactionsByPortfolioId(portfolioId: UUID): List<Transaction> =
         transactionRepository.findAllByPortfolioId(portfolioId)
@@ -71,7 +71,7 @@ class TransactionService(
     fun getSecurityTotalByCategoryByAdvisorId(advisorId: UUID): Map<SecurityCategory, Float> =
         getAllTransactionsByAdvisorId(advisorId).groupingBy { transaction: Transaction ->
             securityService.getSecurityCategoryByName(
-                transaction.security_name
+                transaction.securityName
             )
         }
             .aggregate { _, accumulator: Float?, transaction, first ->

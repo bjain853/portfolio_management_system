@@ -9,16 +9,19 @@ import java.util.*
 @Entity
 @Table(name = "securities")
 class Security(
-    @Enumerated
+
+    @Enumerated(EnumType.STRING)
     val category: SecurityCategory,
+
     val name: String,
     val date: LocalDateTime = LocalDateTime.now(),
     val open: Float,
     val high: Float,
     val low: Float,
     val close: Float,
-    val adj_close: Float,
+    val adjClose: Float,
     val volume: Float,
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @JdbcTypeCode(SqlTypes.VARCHAR)
